@@ -1,11 +1,9 @@
 #!/bin/sh
 
-TOKEN="aaa6f3752d584a24e931b81616d5e64f"
-
 API="http://localhost:4741"
-URL_PATH="/cars"
+URL_PATH="/examples"
 
-curl "${API}${URL_PATH}" \
+curl "${API}${URL_PATH}/${ID}" \
   --include \
   --request GET \
   --header "Authorization: Bearer ${TOKEN}"
