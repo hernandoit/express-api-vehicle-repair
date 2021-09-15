@@ -14,7 +14,7 @@ const carSchema = new Schema({
     required: true
   },
   model: {
-    type: Number,
+    type: String,
     required: true
   },
   owner: {
