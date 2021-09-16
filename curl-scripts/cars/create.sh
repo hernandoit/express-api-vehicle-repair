@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TOKEN="e40a45c252d07b1e2203c518fb2aa8d6"
+TOKEN="40eeabe0e9280d510dd41338d92f4f3b"
 
 YEAR=2021
 MAKE="Dodge"
