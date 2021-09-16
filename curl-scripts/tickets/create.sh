@@ -1,11 +1,11 @@
 #!/bin/bash
 
-TOKEN="aaa6f3752d584a24e931b81616d5e64f"
+TOKEN="607771571c9d716bc8482298144b58e6"
 
 JOB="Brakes"
 LABOR=1
 ISCOMPLETE=true
-CAR_ID=""
+CAR_ID="61427b2ebfd78d56eb0a7c72"
 
 API="http://localhost:4741"
 URL_PATH="/tickets"

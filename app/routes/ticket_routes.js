@@ -4,7 +4,7 @@ const express = require('express')
 const passport = require('passport')
 
 // pull in Mongoose model for tickets
-const Ticket = require('../models/ticket')
+const Car = require('../models/car')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -27,22 +27,6 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-// INDEX
-// GET /tickets
-router.get('/tickets', requireToken, (req, res, next) => {
-  Ticket.find()
-    .then(tickets => {
-      // `tickets` will be an array of Mongoose documents
-      // we want to convert each one to a POJO, so we use `.map` to
-      // apply `.toObject` to each one
-      return tickets.map(ticket => ticket.toObject())
-    })
-    // respond with status 200 and JSON of the tickets
-    .then(tickets => res.status(200).json({ tickets: tickets }))
-    // if an error occurs, pass it to the handler
-    .catch(next)
-})
-
 // SHOW
 // GET /tickets/5a7db6c74d55bc51bdf39793
 router.get('/tickets/:id', requireToken, (req, res, next) => {
@@ -58,11 +42,20 @@ router.get('/tickets/:id', requireToken, (req, res, next) => {
 // CREATE
 // POST /tickets
 router.post('/tickets', requireToken, (req, res, next) => {
-  // set owner of new ticket to be current user
-  req.body.ticket.owner = req.user.id
-
-  Ticket.create(req.body.ticket)
-    // respond to succesful `create` with status 201 and JSON of new "ticket"
+  // get the ticket data from the body of the request
+  const ticketData = req.body.ticket
+  // get the car id from the body
+  const carId = ticketData.carId
+  // find the car by its id
+  Car.findById(carId)
+  .then(handle404)
+  .then(car => {
+    // add the ticket to the car
+    car.tickets.push(ticketData)
+    // save car
+    return car.save()
+  })
+  // respond to succesful `create` with status 201 and JSON of new "ticket"
     .then(ticket => {
       res.status(201).json({ ticket: ticket.toObject() })
     })
@@ -71,6 +64,20 @@ router.post('/tickets', requireToken, (req, res, next) => {
     // can send an error message back to the client
     .catch(next)
 })
+
+  // // set owner of new ticket to be current user
+  // req.body.ticket.owner = req.user.id
+
+  // Ticket.create(req.body.ticket)
+  //   // respond to succesful `create` with status 201 and JSON of new "ticket"
+  //   .then(ticket => {
+  //     res.status(201).json({ ticket: ticket.toObject() })
+  //   })
+  //   // if an error occurs, pass it off to our error handler
+  //   // the error handler needs the error message and the `res` object so that it
+  //   // can send an error message back to the client
+  //   .catch(next)
+
 
 // UPDATE
 // PATCH /tickets/5a7db6c74d55bc51bdf39793
