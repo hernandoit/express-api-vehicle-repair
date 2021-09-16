@@ -1,16 +1,16 @@
 #!/bin/bash
 
-TOKEN="607771571c9d716bc8482298144b58e6"
+CAR_ID="6143a0130253e0f8d3c75de7"
+TOKEN="9a6ae7d05e8088e610f6d9d0add4fefe"
 
 JOB="Brakes"
-LABOR=1
-ISCOMPLETE=true
-CAR_ID="61427b2ebfd78d56eb0a7c72"
+LABOR=2
+ISCOMPLETE=false
 
 API="http://localhost:4741"
 URL_PATH="/tickets"
 
-curl "${API}${URL_PATH}" \
+curl "${API}${URL_PATH}/${CAR_ID}" \
   --include \
   --request POST \
   --header "Content-Type: application/json" \
@@ -19,8 +19,7 @@ curl "${API}${URL_PATH}" \
     "ticket": {
       "job": "'"${JOB}"'",
       "labor": "'"${LABOR}"'",
-      "isComplete": "'"${ISCOMPLETE}"'",
-      "carId": "'"${CAR_ID}"'"      
+      "isComplete": "'"${ISCOMPLETE}"'"
     }
   }'
 

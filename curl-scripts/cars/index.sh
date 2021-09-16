@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TOKEN="607771571c9d716bc8482298144b58e6"
+TOKEN="9a6ae7d05e8088e610f6d9d0add4fefe"
 
 API="http://localhost:4741"
 URL_PATH="/cars"

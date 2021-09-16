@@ -1,7 +1,7 @@
 #!/bin/sh
 
-ID="614279cfbfd78d56eb0a7c71"
-TOKEN="e40a45c252d07b1e2203c518fb2aa8d6"
+ID="614372b5efe964c111986501"
+TOKEN="9a6ae7d05e8088e610f6d9d0add4fefe"
 
 API="http://localhost:4741"
 URL_PATH="/cars"

@@ -19,6 +19,7 @@ const requireOwnership = customErrors.requireOwnership
 // this is middleware that will remove blank fields from `req.body`, e.g.
 // { ticket: { title: '', text: 'foo' } } -> { ticket: { text: 'foo' } }
 const removeBlanks = require('../../lib/remove_blank_fields')
+
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
@@ -27,25 +28,14 @@ const requireToken = passport.authenticate('bearer', { session: false })
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-// SHOW
-// GET /tickets/5a7db6c74d55bc51bdf39793
-router.get('/tickets/:id', requireToken, (req, res, next) => {
-  // req.params.id will be set based on the `:id` in the route
-  Ticket.findById(req.params.id)
-    .then(handle404)
-    // if `findById` is succesful, respond with 200 and "ticket" JSON
-    .then(ticket => res.status(200).json({ ticket: ticket.toObject() }))
-    // if an error occurs, pass it to the handler
-    .catch(next)
-})
-
 // CREATE
-// POST /tickets
-router.post('/tickets', requireToken, (req, res, next) => {
+// POST /tickets/:carId
+router.post('/tickets/:carId', requireToken, (req, res, next) => {
   // get the ticket data from the body of the request
   const ticketData = req.body.ticket
   // get the car id from the body
-  const carId = ticketData.carId
+  const carId = req.params.carId
+  console.log(carId)
   // find the car by its id
   Car.findById(carId)
   .then(handle404)
@@ -65,37 +55,42 @@ router.post('/tickets', requireToken, (req, res, next) => {
     .catch(next)
 })
 
-  // // set owner of new ticket to be current user
-  // req.body.ticket.owner = req.user.id
-
-  // Ticket.create(req.body.ticket)
-  //   // respond to succesful `create` with status 201 and JSON of new "ticket"
-  //   .then(ticket => {
-  //     res.status(201).json({ ticket: ticket.toObject() })
-  //   })
-  //   // if an error occurs, pass it off to our error handler
-  //   // the error handler needs the error message and the `res` object so that it
-  //   // can send an error message back to the client
-  //   .catch(next)
-
+// SHOW
+// GET /tickets/:carId/:ticketId
+// gets one car by their id
+router.get('/tickets/:carId/:ticketId', requireToken, (req, res, next) => {
+	// gets the id of our ticket from the parameters
+  const ticketId = req.params.ticketId
+  // get the car id from the parameters
+  const carId = req.params.carId
+	// gets 1 ticket matching the cars id
+	Car.findById(carId)
+		// if document doesnt exist then throw our custom error
+		.then(handle404)
+		// if document exists send the response in json format
+		.then((ticket) => res.status(200).json({ car: ticket.toObject() }))
+		// runs the next middleware
+		.catch(next)
+})
 
 // UPDATE
-// PATCH /tickets/5a7db6c74d55bc51bdf39793
-router.patch('/tickets/:id', requireToken, removeBlanks, (req, res, next) => {
-  // if the client attempts to change the `owner` property by including a new
-  // owner, prevent that by deleting that key/value pair
-  delete req.body.ticket.owner
-
-  Ticket.findById(req.params.id)
+// PATCH /tickets/:carId/:ticketId
+router.patch('/tickets/:carId/:ticketId', requireToken, removeBlanks, (req, res, next) => {
+  // gets the id of our ticket from the parameters
+  const ticketId = req.params.ticketId
+  // get the ticket data from the body of the request
+  const ticketData = req.body.ticket
+  // get the car id from the parameters
+  const carId = req.params.carId
+  // find the car by its id
+  Car.findById(carId)
     .then(handle404)
-    .then(ticket => {
-      // pass the `req` object and the Mongoose record to `requireOwnership`
-      // it will throw an error if the current user isn't the owner
-      requireOwnership(req, ticket)
-
-      // pass the result of Mongoose's `.update` to the next `.then`
-      return ticket.updateOne(req.body.ticket)
+    .then(car => {
+      const ticket = car.tickets.id(ticketId)
+      ticket.set(ticketData)
+      return car.save()
     })
+   
     // if that succeeded, return 204 and no JSON
     .then(() => res.sendStatus(204))
     // if an error occurs, pass it to the handler
@@ -103,10 +98,17 @@ router.patch('/tickets/:id', requireToken, removeBlanks, (req, res, next) => {
 })
 
 // DESTROY
-// DELETE /tickets/5a7db6c74d55bc51bdf39793
-router.delete('/tickets/:id', requireToken, (req, res, next) => {
-  Ticket.findById(req.params.id)
+// DELETE /tickets/:carId/:ticketId
+router.delete('/tickets/:carId/:ticketId', requireToken, (req, res, next) => {
+  const ticketId = req.params.ticketId
+  const carId = req.params.carId
+  console.log(carId)
+  Car.findById(carId)
     .then(handle404)
+    .then(car => {
+      car.tickets.id(ticketId).remove()
+      return car.save()
+    })
     .then(ticket => {
       // throw an error if current user doesn't own `ticket`
       requireOwnership(req, ticket)
