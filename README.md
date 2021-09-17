@@ -18,6 +18,8 @@ An explanation of the what the app does and how it works
 ## `Important Links`
 [Deployed Client](https://hernandoit.github.io/vehicle-repair-client/)
 
+[Deployed Server](https://salty-river-98460.herokuapp.com/)
+
 [Client Repo](https://github.com/hernandoit/vehicle-repair-client)
 
 [Server Repo](https://github.com/hernandoit/express-api-vehicle-repair)
