@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ID="614279cfbfd78d56eb0a7c71"
-TOKEN="e40a45c252d07b1e2203c518fb2aa8d6"
+TOKEN="0223c55679cb8c36340e9e7b9c996b94"
 
 YEAR=2021
 MAKE="Dodge"

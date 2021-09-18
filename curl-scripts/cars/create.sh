@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TOKEN="9a6ae7d05e8088e610f6d9d0add4fefe"
+TOKEN="0223c55679cb8c36340e9e7b9c996b94"
 
 YEAR=2001
 MAKE="Nissan"
