@@ -10,10 +10,16 @@ An explanation of the what the app does and how it works
 ## `Setup Steps`
 1. Fork and clone this repository into your projects location 
    - `git clone git@github.com:<your github account name here>/react-material-design.git`
-2. Create a new branch, and name it after your project. 
-2. Checkout to your newly created branch.
+2a. Create a new branch, and name it after your project. 
+2b. Checkout to your newly created branch.
    - `git checkout -b <your projects name here>`
-4. Install dependencies with ```npm install```.
+3. Install dependencies with ```npm install```.
+
+## `Installation Steps`
+1. Empty README.md and fill with your own content.
+2. Ensure that you have nodemon installed by running npm install -g nodemon.
+3. Ensure the API is functioning properly by running npm run server.
+4. Once everything is working, make an initial commit.
 
 ## `Important Links`
 [Deployed Client](https://hernandoit.github.io/vehicle-repair-client/)
@@ -23,7 +29,6 @@ An explanation of the what the app does and how it works
 [Client Repo](https://github.com/hernandoit/vehicle-repair-client)
 
 [Server Repo](https://github.com/hernandoit/express-api-vehicle-repair)
-
 
 ## `Tasks`
 
