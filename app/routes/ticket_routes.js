@@ -55,6 +55,22 @@ router.post('/tickets/:carId', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+// INDEX
+// GET /tickets
+router.get('/tickets', requireToken, (req, res, next) => {
+  Ticket.find()
+    .then(tickets => {
+      // `tickets` will be an array of Mongoose documents
+      // we want to convert each one to a POJO, so we use `.map` to
+      // apply `.toObject` to each one
+      return tickets.map(ticket => ticket.toObject())
+    })
+    // respond with status 200 and JSON of the tickets
+    .then(tickets => res.status(200).json({ tickets: tickets }))
+    // if an error occurs, pass it to the handler
+    .catch(next)
+})
+
 // SHOW
 // GET /tickets/:carId/:ticketId
 // gets one car by their id
